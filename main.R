@@ -22,11 +22,11 @@ u_tbl <- subset( u_tbl, select = -c(date, value))
 write.csv( u_tbl, "./data/uempl.csv", row.names=FALSE )
 
 #
-# this is 'core' inflation
+# this is overall, higher than just 'core' inflation
 #
-i_tbl <- read.csv( "./data/CPILFESL.csv", sep=",", header=FALSE, skip=0 )
+i_tbl <- read.csv( "./data/CPIAUCSL.csv", sep=",", header=FALSE, skip=0 )
 toskip <- which( i_tbl$V1 == "date" ) - 1
-i_tbl <- read.csv( "./data/CPILFESL.csv", sep=",", header=TRUE, skip=toskip )
+i_tbl <- read.csv( "./data/CPIAUCSL.csv", sep=",", header=TRUE, skip=toskip )
 i_tbl$YMDate <- mdy( i_tbl$date )
 i_tbl$CPI <- i_tbl$value
 i_tbl <- subset( i_tbl, select = -c(date, value))
@@ -37,6 +37,7 @@ write.csv( i_tbl, "./data/infl.csv", sep=",", row.names=FALSE)
 
 #### on pause
 iu_tbl <- inner_join( i_tbl, u_tbl , by="YMDate" )
+# not necessary to drop the CPI table, just OCD
 iu_tbl <- subset( iu_tbl, select = -c(CPI) )
 
 
