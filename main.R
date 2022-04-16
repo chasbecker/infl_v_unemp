@@ -33,7 +33,7 @@ i_tbl <- subset( i_tbl, select = -c(date, value))
 # calculate month-to-month inflation from previous and current CPI
 i_tbl <- (mutate( i_tbl, Inflx1000 = ( (CPI - lag(CPI) ) / lag(CPI) )*1000 ))
 i_tbl$Inflx1000 <- round( i_tbl$Inflx1000, digits = 1 )
-write.csv( i_tbl, "./data/infl.csv", sep=",", row.names=FALSE)
+write.csv( i_tbl, "./data/infl.csv", row.names=FALSE)
 
 #### on pause
 iu_tbl <- inner_join( i_tbl, u_tbl , by="YMDate" )
