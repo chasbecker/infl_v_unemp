@@ -1,2 +1,2 @@
 SELECT * FROM infl
-INNER JOIN uempl ON infl.YMDate = uempl.YMDate
+INNER JOIN unempl ON infl.YMDate = unempl.YMDate
