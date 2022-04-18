@@ -9,7 +9,7 @@
 
 rm(list=ls())
 library(fredr)
-library(usethis)  # to edit .Renviron file <***>
+# library(usethis)  # to edit .Renviron file <***>
 library(tidyverse)
 
 # get FRED API key, save to environment variable
