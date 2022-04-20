@@ -12,6 +12,12 @@ library(fredr)
 # library(usethis)  # to edit .Renviron file one time <***>>>
 library(tidyverse)
 
+# The variable 'infladj' will be used to normalize the inflation value so it's:
+# a) always positive, and b) zero at some arbitrary selected unemployment rate.
+# This is to allow testing various hypothesis about natural inflation and unemployment.
+
+infladj <- as.numeric( readline( "How much do you want to normalize inflation for (pls enter a number): ") )
+
 # get FRED API key, save to environment variable
 
 # 1) registered for FRED account
@@ -37,14 +43,21 @@ i_tbl <- rename(i_tbl, CPI = value )
 i_tbl <- (mutate( i_tbl, inflx10 = ( (CPI - lag(CPI) ) / lag(CPI) )*1000 ))
 i_tbl$inflx10 <- round( i_tbl$inflx10, digits = 1 )
 i_tbl <- subset( i_tbl, select = c(date, inflx10))
+
+# calculate 'infdev2', being the absolute difference between actual inflation
+# and the user specified hypothetical natural inflation
+i_tbl <- mutate( i_tbl, infdev2 = abs( inflx10 - infladj ) )
+
 write.csv( i_tbl, "./data/infl.csv", row.names=FALSE)
+
 
 iu_tbl <- inner_join( i_tbl, u_tbl , by="date" )
 
-explPlot1 <- ggplot( data = iu_tbl )+
-                geom_line( aes(y=inflx10, x= date, colour="inflx10"),size=1 )+
-                geom_line( aes(y=unempl, x= date, colour="unempl"),size=1) +
-                scale_color_manual(name = "Infl_v_Unempl", values = c("inflx10" = "steelblue1", "unempl" = "deeppink1"))
+explPlot1 <- ggplot( data = iu_tbl, aes( x = date ) )+
+                geom_line( aes(y=inflx10, colour="inflx10"),size=1 )+
+                geom_line( aes(y=unempl, colour="unempl"),size=1) +
+                geom_line( aes( y = infdev2, colour="infdev2")) +
+                scale_color_manual(name = "Infl_v_Unempl", values = c("inflx10" = "bisque", "unempl" = "deeppink1", "infdev2" = "deepskyblue2"))
   
 explPlot1
 
