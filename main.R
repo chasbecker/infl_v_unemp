@@ -3,18 +3,20 @@
 #
 # all FRED data from the St Louis FED
 
-#  Needed for this project
+#  Install packages needed for this project
 #install.packages("fredr")
 #install.packages("usethis")
 
 rm(list=ls())
 library(fredr)
-# library(usethis)  # to edit .Renviron file one time <***>>>
+# to edit .Renviron file one time <***>>>
+# library(usethis)  
 library(tidyverse)
 
 # The variable 'infladj' will be used to normalize the inflation value so it's:
 # a) always positive, and b) zero at some arbitrary selected unemployment rate.
-# This is to allow testing various hypothesis about natural inflation and unemployment.
+# This is to allow testing various hypothesis about natural inflation
+# deviation from some 'ideal' inflation rate, and unemployment.
 
 infladj <- as.numeric( readline( "How much do you want to normalize inflation for (pls enter a number): ") )
 
@@ -32,6 +34,7 @@ infladj <- as.numeric( readline( "How much do you want to normalize inflation fo
 u_tbl <- fredr(series_id = "UNRATE")
 u_tbl <- rename( u_tbl, unempl = value )
 u_tbl <- subset( u_tbl, select = c(date, unempl))
+# write file to disk for ?future? reference
 write.csv( u_tbl, "./data/unempl.csv", row.names=FALSE )
 
 # read, transform, save CPI/inflation data from FRED
@@ -48,15 +51,16 @@ i_tbl <- subset( i_tbl, select = c(date, inflx10))
 # and the user specified hypothetical natural inflation
 i_tbl <- mutate( i_tbl, infdev2 = abs( inflx10 - infladj ) )
 
+# write file to disk for ?future? reference
 write.csv( i_tbl, "./data/infl.csv", row.names=FALSE)
 
-
+# create plotable dataframe
 iu_tbl <- inner_join( i_tbl, u_tbl , by="date" )
 
 explPlot1 <- ggplot( data = iu_tbl, aes( x = date ) )+
-                geom_line( aes(y=inflx10, colour="inflx10"),size=1 )+
-                geom_line( aes(y=unempl, colour="unempl"),size=1) +
-                geom_line( aes( y = infdev2, colour="infdev2")) +
+                geom_line( aes( y=inflx10, colour="inflx10"),size=1 ) +
+                geom_line( aes( y=unempl, colour="unempl"),size=1 ) +
+                geom_line( aes( y = infdev2, colour="infdev2") ) +
                 scale_color_manual(name = "Infl_v_Unempl", values = c("inflx10" = "bisque", "unempl" = "deeppink1", "infdev2" = "deepskyblue2"))
   
 explPlot1
