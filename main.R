@@ -9,12 +9,10 @@
 
 rm(list=ls())
 library(fredr)
-<<<<<<< HEAD
-# to edit .Renviron file one time <***>>>
+
+# 'usethis' library to edit .Renviron file one time <***>>>
 # library(usethis)  
-=======
-# library(usethis)  # to edit .Renviron file <***>>>
->>>>>>> b7e1aff02c56e528db2e43c4b3d1f1a810c883b9
+
 library(tidyverse)
 
 # The variable 'infladj' will be used to normalize the inflation value so it's:
@@ -68,4 +66,3 @@ explPlot1 <- ggplot( data = iu_tbl, aes( x = date ) )+
                 scale_color_manual(name = "Infl_v_Unempl", values = c("inflx10" = "bisque", "unempl" = "deeppink1", "infdev2" = "deepskyblue2"))
   
 explPlot1
-
