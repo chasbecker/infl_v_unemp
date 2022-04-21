@@ -9,8 +9,12 @@
 
 rm(list=ls())
 library(fredr)
+<<<<<<< HEAD
 # to edit .Renviron file one time <***>>>
 # library(usethis)  
+=======
+# library(usethis)  # to edit .Renviron file <***>>>
+>>>>>>> b7e1aff02c56e528db2e43c4b3d1f1a810c883b9
 library(tidyverse)
 
 # The variable 'infladj' will be used to normalize the inflation value so it's:
